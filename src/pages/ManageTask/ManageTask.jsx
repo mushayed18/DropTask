@@ -1,7 +1,7 @@
 const ManageTask = () => {
     return (
         <div>
-            manage
+            
         </div>
     );
 };
