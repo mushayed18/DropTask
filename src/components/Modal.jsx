@@ -18,9 +18,9 @@ const Modal = ({ isOpen, onClose, onSave, title, setTitle, description, setDescr
             className="w-full p-2 border rounded mb-3"
             placeholder="Task Description (Optional)"
           ></textarea>
-          <div className="flex justify-end gap-3">
-            <button onClick={onClose} className="px-4 py-2 bg-gray-400 text-white rounded">Cancel</button>
-            <button onClick={onSave} className="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+          <div className="flex justify-center gap-3">
+            <button onClick={onClose} className="px-4 py-2 hover:bg-white hover:text-green-500 border border-green-500 text-white bg-green-500 cursor-pointer rounded">Cancel</button>
+            <button onClick={onSave} className="px-4 py-2 hover:bg-green-500 border border-green-500 hover:text-white cursor-pointer bg-white text-green-500 rounded">Update</button>
           </div>
         </div>
       </div>
