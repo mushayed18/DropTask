@@ -34,7 +34,7 @@ const Navbar = () => {
           Manage Task
         </button>
       </NavLink>
-      <NavLink className={'block lg:hidden'} to={"/"} onClick={closeSidebar}>
+      <NavLink className={'block lg:hidden'} to={"/login"} onClick={closeSidebar}>
         <button className="flex gap-2 items-center cursor-pointer">
           <MdLogin />
           Login
@@ -57,7 +57,7 @@ const Navbar = () => {
 
         {/* Login NavLink (Hidden on small & medium screens) */}
         <div className="hidden lg:block">
-          <NavLink to={"/"} onClick={closeSidebar}>
+          <NavLink to={"/login"} onClick={closeSidebar}>
             <button className="flex gap-2 items-center cursor-pointer">
               <MdLogin />
               Login
