@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { setUser, signInWithGoogle, loading, setLoading } =
+  const { setUser, signInWithGoogle, setLoading } =
     useContext(AuthContext);
 
   const navigate = useNavigate();

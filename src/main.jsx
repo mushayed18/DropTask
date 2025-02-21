@@ -4,9 +4,13 @@ import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage/ErrorPage.jsx";
-import Home from "./pages/Home.jsx";
+import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
 import AuthProvider from "./Provider/AuthProvider.jsx";
+import PrivateRoute from "./PrivateRoute/PrivateRoute.jsx";
+import PrivateSign from "./PrivateRoute/PrivateSign.jsx";
+import AddTask from "./pages/AddTask/AddTask.jsx";
+import ManageTask from "./pages/ManageTask/ManageTask.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,11 +20,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <PrivateRoute><Home /></PrivateRoute>,
+      },
+      {
+        path: "/add-task",
+        element: <PrivateRoute><AddTask /></PrivateRoute>,
+      },
+      {
+        path: "/manage-task",
+        element: <PrivateRoute><ManageTask /></PrivateRoute>,
       },
       {
         path: "/login",
-        element: <Login />,
+        element: <PrivateSign><Login /></PrivateSign>,
       },
     ],
   },
