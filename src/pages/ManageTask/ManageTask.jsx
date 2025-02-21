@@ -7,13 +7,18 @@ const ManageTask = () => {
   const { user } = useContext(AuthContext);
   const [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
+  // Function to fetch tasks
+  const fetchTasks = () => {
     if (user?.uid) {
       axios
         .get(`http://localhost:5000/tasks/${user.uid}`)
         .then((res) => setTasks(res.data))
         .catch((err) => console.error("Error fetching tasks:", err));
     }
+  };
+
+  useEffect(() => {
+    fetchTasks(); // Initial fetch when component loads
   }, [user?.uid]);
 
   return (
@@ -25,9 +30,9 @@ const ManageTask = () => {
           <p className="text-center text-gray-500">No tasks found.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
           {tasks.map((task) => (
-            <TaskCard key={task._id} task={task} />
+            <TaskCard key={task._id} task={task} onUpdate={fetchTasks} />
           ))}
         </div>
       )}
