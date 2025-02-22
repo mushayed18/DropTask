@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { AuthContext } from "../../Provider/AuthProvider";
 
 const AddTask = () => {
-  const { user } = useContext(AuthContext); 
+  const { user } = useContext(AuthContext);
   const [taskData, setTaskData] = useState({ title: "", description: "" });
 
   const handleChange = (e) => {
@@ -15,7 +15,7 @@ const AddTask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user?.uid) {
+    if (!user?.email) {
       toast.error("You must be logged in to add tasks.");
       return;
     }
@@ -26,14 +26,16 @@ const AddTask = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/tasks", {
-        ...taskData,
-        userId: user.uid, 
-      });
+      const response = await axios.post(
+        "https://drop-task-server.vercel.app/tasks",
+        {
+          ...taskData,
+          email: user.email, // ✅ Send email instead of UID
+        }
+      );
 
       toast.success(response.data.message);
       setTaskData({ title: "", description: "" });
-
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add task");
     }
@@ -62,7 +64,10 @@ const AddTask = () => {
             maxLength={200}
             className="border p-2 rounded-md h-32 resize-none"
           />
-          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-white hover:text-black border border-green-500 cursor-pointer">
+          <button
+            type="submit"
+            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-white hover:text-black border border-green-500 cursor-pointer"
+          >
             Add Task
           </button>
         </form>

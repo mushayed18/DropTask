@@ -10,7 +10,7 @@ const DraggableTask = ({ task }) => {
   };
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style} className="p-3 bg-white border shadow-md cursor-pointer">
+    <div ref={setNodeRef} {...attributes} {...listeners} style={style} className="my-3 p-3 bg-gray-500 text-white border shadow-md cursor-pointer">
       {task.title}
     </div>
   );

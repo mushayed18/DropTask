@@ -24,8 +24,7 @@ const Login = () => {
       });
 
       // Send user data to backend to store in MongoDB (only if it's their first login)
-      await axios.post("http://localhost:5000/users", {
-        uid: loggedInUser.uid,
+      await axios.post("https://drop-task-server.vercel.app/users", {
         email: loggedInUser.email,
         displayName: loggedInUser.displayName,
       });

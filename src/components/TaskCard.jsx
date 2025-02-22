@@ -1,22 +1,36 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Modal from "./Modal";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const TaskCard = ({ task, onUpdate }) => {
+  const { user } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description || "");
 
   const handleUpdate = async () => {
+    if (!user?.email) {
+      toast.error("You must be logged in to update tasks.");
+      return;
+    }
+
     try {
-      const response = await fetch(`http://localhost:5000/tasks/${task._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description }),
-      });
+      const response = await fetch(
+        `https://drop-task-server.vercel.app/tasks/${task._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: user.email, // ✅ Send email
+            title,
+            description,
+          }),
+        }
+      );
 
       if (response.ok) {
         onUpdate(); // Refresh task list
@@ -27,13 +41,20 @@ const TaskCard = ({ task, onUpdate }) => {
             color: "#FFFFFF",
           },
         });
+      } else {
+        toast.error("Failed to update task.");
       }
     } catch (error) {
-      console.error("Error updating task:", error);
+      toast.error("Something went wrong.");
     }
   };
 
   const handleDeleteBtn = () => {
+    if (!user?.email) {
+      toast.error("You must be logged in to delete tasks.");
+      return;
+    }
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -45,9 +66,14 @@ const TaskCard = ({ task, onUpdate }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(`http://localhost:5000/tasks/${task._id}`, {
-            method: "DELETE",
-          });
+          const response = await fetch(
+            `https://drop-task-server.vercel.app/tasks/${task._id}`,
+            {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: user.email }), // ✅ Send email instead of UID
+            }
+          );
 
           if (response.ok) {
             onUpdate(); // Refresh task list
@@ -64,7 +90,6 @@ const TaskCard = ({ task, onUpdate }) => {
             });
           }
         } catch (error) {
-          console.error("Error deleting task:", error);
           Swal.fire({
             title: "Error!",
             text: "Something went wrong.",
@@ -78,7 +103,9 @@ const TaskCard = ({ task, onUpdate }) => {
   return (
     <div className="border p-4 rounded-md shadow-md bg-white flex flex-col justify-between">
       <h3 className="text-lg font-semibold text-green-500">{task.title}</h3>
-      {task.description && <p className="text-gray-600 font-bold pt-5">{task.description}</p>}
+      {task.description && (
+        <p className="text-gray-600 font-bold pt-5">{task.description}</p>
+      )}
       <p className="text-sm text-gray-500 pt-2">
         {new Date(task.timestamp).toLocaleString("en-US", {
           weekday: "short",
@@ -89,7 +116,8 @@ const TaskCard = ({ task, onUpdate }) => {
           minute: "2-digit",
           second: "2-digit",
           hour12: true,
-        })} (last time edited)
+        })}{" "}
+        (last time edited)
       </p>
       <div className="flex justify-center gap-2 mt-8">
         <button

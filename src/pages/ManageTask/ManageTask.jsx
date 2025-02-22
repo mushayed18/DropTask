@@ -9,17 +9,17 @@ const ManageTask = () => {
 
   // Function to fetch tasks
   const fetchTasks = () => {
-    if (user?.uid) {
+    if (user?.email) {
       axios
-        .get(`http://localhost:5000/tasks/${user.uid}`)
+        .get(`https://drop-task-server.vercel.app/tasks/${user.email}`)
         .then((res) => setTasks(res.data))
-        .catch((err) => console.error("Error fetching tasks:", err));
+        .catch((err) => {});
     }
   };
 
   useEffect(() => {
     fetchTasks(); // Initial fetch when component loads
-  }, [user?.uid]);
+  }, [user?.email]);
 
   return (
     <div className="min-h-screen p-6">
